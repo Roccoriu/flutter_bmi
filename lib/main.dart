@@ -51,7 +51,7 @@ class MyApp extends StatelessWidget {
                 },
                 tooltip: 'Increment',
                 child: const Icon(Icons.add),
-              ), // This trailing comma makes auto-formatting nicer for build methods.
+              ),
             );
           },
         ));
