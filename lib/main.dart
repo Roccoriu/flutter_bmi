@@ -1,6 +1,6 @@
-import 'package:bmi_calculator/model/models.dart';
-import 'package:bmi_calculator/reducers/app_reducers.dart';
 import 'package:bmi_calculator/routes/router.dart';
+import 'package:bmi_calculator/store/model/app_state.dart';
+import 'package:bmi_calculator/store/reducers/app_reducers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
