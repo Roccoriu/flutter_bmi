@@ -1,4 +1,5 @@
 import 'package:bmi_calculator/store/actions/bmi_actions.dart';
+import 'package:bmi_calculator/store/model/bmi_state.dart';
 import 'package:bmi_calculator/utils/bmi.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
@@ -21,30 +22,34 @@ class _BmiFormState extends State<BmiForm> {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 35),
-      child: Column(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-        Column(children: [
-          TextFormField(
-            controller: heightController,
-            keyboardType: TextInputType.number,
-            decoration: const InputDecoration(
-              labelText: 'Height (cm)',
-              hintText: 'Enter your height in cm',
-            ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          Column(
+            children: [
+              TextFormField(
+                controller: heightController,
+                keyboardType: TextInputType.number,
+                decoration: const InputDecoration(
+                  labelText: 'Height (cm)',
+                  hintText: 'Enter your height in cm',
+                ),
+              ),
+              const SizedBox(height: 60),
+              TextFormField(
+                controller: weightController,
+                keyboardType: TextInputType.number,
+                decoration: const InputDecoration(
+                  labelText: 'Weight (kg)',
+                  hintText: 'Enter your weight in kg',
+                ),
+              )
+            ],
           ),
-          const SizedBox(height: 60),
-          TextFormField(
-            controller: weightController,
-            keyboardType: TextInputType.number,
-            decoration: const InputDecoration(
-              labelText: 'Weight (kg)',
-              hintText: 'Enter your weight in kg',
-            ),
-          )
-        ]),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            SizedBox(
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              SizedBox(
                 width: 150,
                 child: ElevatedButton(
                   child: const Text(
@@ -55,34 +60,36 @@ class _BmiFormState extends State<BmiForm> {
                     heightController.clear();
                     weightController.clear();
                   },
-                )),
-            SizedBox(
-                width: 150,
-                child: ElevatedButton(
-                  child: const Text(
-                    'Calculate',
-                    style: TextStyle(fontSize: 20),
+                ),
+              ),
+              StoreConnector<AppState, BmiState>(
+                converter: (store) => store.state.bmiState,
+                builder: (BuildContext context, BmiState bmiState) => SizedBox(
+                  width: 150,
+                  child: ElevatedButton(
+                    child: const Text(
+                      'Calculate',
+                      style: TextStyle(fontSize: 20),
+                    ),
+                    onPressed: () => onCalculate(bmiState),
                   ),
-                  onPressed: () {
-                    sendToStore();
-                    context.go('/result');
-                  },
-                )),
-          ],
-        ),
-      ]),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
     );
   }
 
-  void sendToStore() {
+  void onCalculate(BmiState bmiState) {
     var height = double.parse(heightController.text);
     var weight = double.parse(weightController.text);
     var bmi = calcBMI(height, weight);
 
-    // TODO: refactor this to be more legible
-    StoreProvider.of<AppState>(context).dispatch(SetHeightAction(height));
-    StoreProvider.of<AppState>(context).dispatch(SetWeightAction(weight));
     StoreProvider.of<AppState>(context).dispatch(SetBmiResultAction(bmi));
+
+    context.go('/result/${bmiState.getBmiRatingIndex(bmi)}');
   }
 
   @override
