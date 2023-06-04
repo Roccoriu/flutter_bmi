@@ -1,5 +1,14 @@
+import 'package:bmi_calculator/store/model/bmi_state.dart';
 import 'package:redux/redux.dart';
-import '../actions/actions.dart';
+import '../actions/bmi_actions.dart';
+
+BmiState bmiStateReducer(BmiState state, action) {
+  return BmiState(
+    height: heightReducer(state.height, action),
+    weight: weightReducer(state.weight, action),
+    bmiResult: bmiReducer(state.bmiResult, action),
+  );
+}
 
 final heightReducer = TypedReducer<double, SetHeightAction>(_setHeightActionReducer);
 

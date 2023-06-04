@@ -1,4 +1,5 @@
-import 'package:bmi_calculator/store/actions/actions.dart';
+import 'package:bmi_calculator/store/actions/bmi_actions.dart';
+import 'package:bmi_calculator/utils/bmi.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:go_router/go_router.dart';
@@ -73,16 +74,10 @@ class _BmiFormState extends State<BmiForm> {
     );
   }
 
-  // TODO: maybe move this to a utils file
-  double bmiCalc(double height, double weight) {
-    return (weight / ((height / 100) * (height / 100)));
-  }
-
   void sendToStore() {
-    // TODO: make sure you need this
     var height = double.parse(heightController.text);
     var weight = double.parse(weightController.text);
-    var bmi = bmiCalc(height, weight);
+    var bmi = calcBMI(height, weight);
 
     // TODO: refactor this to be more legible
     StoreProvider.of<AppState>(context).dispatch(SetHeightAction(height));

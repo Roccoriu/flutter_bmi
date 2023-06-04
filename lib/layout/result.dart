@@ -16,7 +16,7 @@ class Result extends StatelessWidget {
         ),
         drawer: const NavDrawer(),
         body: StoreConnector<AppState, double>(
-            converter: (store) => store.state.bmiResult,
+            converter: (store) => store.state.bmiState.bmiResult,
             builder: (BuildContext context, double bmiResult) {
               var bmi = bmiResult.toString();
               return Center(child: Text('BMI Result $bmi', style: const TextStyle(fontSize: 30)));
