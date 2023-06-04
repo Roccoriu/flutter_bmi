@@ -14,6 +14,12 @@ final GoRouter router = GoRouter(
     GoRoute(
       path: '/result',
       builder: (context, state) => const Result(),
+      routes: <RouteBase>[
+        GoRoute(
+          path: ':id',
+          builder: (context, state) => RatingDetail(id: state.pathParameters['id']),
+        ),
+      ],
     ),
     //GoRoute(
     //  path: '/history',

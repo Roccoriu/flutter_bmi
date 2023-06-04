@@ -1,3 +1,5 @@
+import '../model/bmi_state.dart';
+
 class SetHeightAction {
   final double payload;
 
@@ -14,4 +16,10 @@ class SetBmiResultAction {
   final double payload;
 
   SetBmiResultAction(this.payload);
+}
+
+class SetBmiRatingAction {
+  final List<BmiRating> payload;
+
+  SetBmiRatingAction(this.payload);
 }
