@@ -1,3 +1,4 @@
+import 'package:bmi_calculator/layout/result.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -10,10 +11,10 @@ final GoRouter router = GoRouter(
       path: '/calculator',
       builder: (context, state) => const Calculator(),
     ),
-    //GoRoute(
-    //  path: '/rating',
-    //  pageBuilder: (context, state) => const Rating(),
-    //),
+    GoRoute(
+      path: '/result',
+      builder: (context, state) => const Result(),
+    ),
     //GoRoute(
     //  path: '/history',
     //  pageBuilder: (context, state) => const History(),
