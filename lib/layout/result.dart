@@ -1,8 +1,7 @@
 import 'package:bmi_calculator/layout/drawer.dart';
-import 'package:bmi_calculator/store/model/app_state.dart';
-import 'package:bmi_calculator/store/model/bmi_state.dart';
+import 'package:bmi_calculator/services/bmi_service.dart';
+import 'package:bmi_calculator/types/bmi.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_redux/flutter_redux.dart';
 import 'package:go_router/go_router.dart';
 
 class Result extends StatelessWidget {
@@ -17,16 +16,16 @@ class Result extends StatelessWidget {
         title: const Text('Ratings'),
       ),
       drawer: const NavDrawer(),
-      body: StoreConnector<AppState, BmiState>(
-        converter: (store) => store.state.bmiState,
-        builder: (BuildContext context, BmiState bmiState) {
+      body: FutureBuilder<List<BmiRating>>(
+        future: BmiService.getBmiRatings(),
+        builder: (BuildContext context, AsyncSnapshot<List<BmiRating>> bmiState) {
           return ListView.builder(
-            itemCount: bmiState.bmiRatings.length,
+            itemCount: bmiState.data?.length ?? 0,
             itemBuilder: (BuildContext context, int index) => Padding(
               padding: const EdgeInsets.all(10),
               child: ListTile(
-                title: Text(bmiState.bmiRatings[index].description),
-                onTap: () => context.go('/result/$index'),
+                title: Text(bmiState.data![index].description),
+                onTap: () => context.go('/result/${bmiState.data![index].id}'),
               ),
             ),
           );
@@ -49,15 +48,14 @@ class RatingDetail extends StatelessWidget {
         backgroundColor: Colors.deepPurple,
         title: const Text('Rating Detail'),
       ),
-      body: StoreConnector<AppState, BmiState>(
-        converter: (store) => store.state.bmiState,
-        builder: (BuildContext context, BmiState bmiState) {
-          final rating = bmiState.bmiRatings[int.parse(id!)];
+      body: FutureBuilder<BmiRating>(
+        future: BmiService.getBmiRatingById(id: int.parse(id!)),
+        builder: (BuildContext context, AsyncSnapshot<BmiRating> bmiRating) {
           return Padding(
             padding: const EdgeInsets.all(10),
             child: Column(
               children: [
-                Text(rating.description, style: const TextStyle(fontSize: 30)),
+                Text(bmiRating.data?.description ?? '', style: const TextStyle(fontSize: 30)),
                 const SizedBox(height: 20),
                 //Text(rating.range, style: const TextStyle(fontSize: 20)),
                 //const SizedBox(height: 20),

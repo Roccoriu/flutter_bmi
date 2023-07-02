@@ -1,14 +1,14 @@
+import 'package:bmi_calculator/db/database_helper.dart';
 import 'package:bmi_calculator/routes/router.dart';
-import 'package:bmi_calculator/store/model/app_state.dart';
-import 'package:bmi_calculator/store/reducers/app_reducers.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_redux/flutter_redux.dart';
-import 'package:redux/redux.dart';
 
 void main() {
-  final store = Store<AppState>(appReducer, initialState: initialState);
+  //final store = Store<AppState>(appReducer, initialState: initialState);
 
-  runApp(StoreProvider(store: store, child: const MyApp()));
+  DatabaseHelper.instance.database;
+  //runApp(StoreProvider(store: store, child: const MyApp()));
+
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {

@@ -1,12 +1,8 @@
-import 'package:bmi_calculator/store/actions/bmi_actions.dart';
-import 'package:bmi_calculator/store/model/bmi_state.dart';
+import 'package:bmi_calculator/services/bmi_service.dart';
 import 'package:bmi_calculator/utils/bmi.dart';
 import 'package:bmi_calculator/utils/validators.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_redux/flutter_redux.dart';
 import 'package:go_router/go_router.dart';
-
-import '../store/model/app_state.dart';
 
 class BmiForm extends StatefulWidget {
   const BmiForm({Key? key}) : super(key: key);
@@ -69,17 +65,16 @@ class _BmiFormState extends State<BmiForm> {
                     },
                   ),
                 ),
-                StoreConnector<AppState, BmiState>(
-                  converter: (store) => store.state.bmiState,
-                  builder: (BuildContext context, BmiState bmiState) => SizedBox(
-                    width: 150,
-                    child: ElevatedButton(
-                      child: const Text(
-                        'Calculate',
-                        style: TextStyle(fontSize: 20),
-                      ),
-                      onPressed: () => _formKey.currentState!.validate() ? onCalculate(bmiState) : DoNothingAction(),
+                SizedBox(
+                  width: 150,
+                  child: ElevatedButton(
+                    child: const Text(
+                      'Calculate',
+                      style: TextStyle(fontSize: 20),
                     ),
+                    onPressed: () => _formKey.currentState!.validate()
+                        ? onCalculate((id) => context.go('/result/$id'))
+                        : DoNothingAction(),
                   ),
                 ),
               ],
@@ -90,14 +85,14 @@ class _BmiFormState extends State<BmiForm> {
     );
   }
 
-  void onCalculate(BmiState bmiState) {
+  void onCalculate(Function(int) callback) async {
     var height = double.parse(heightController.text);
     var weight = double.parse(weightController.text);
     var bmi = calcBMI(height, weight);
 
-    StoreProvider.of<AppState>(context).dispatch(SetBmiResultAction(bmi));
+    var id = await BmiService.getBmiRatingIdByResult(rating: bmi);
 
-    context.go('/result/${bmiState.getBmiRatingIndex(bmi)}');
+    callback(id);
   }
 
   @override
