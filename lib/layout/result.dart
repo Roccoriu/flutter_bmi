@@ -1,6 +1,6 @@
 import 'package:bmi_calculator/layout/drawer.dart';
 import 'package:bmi_calculator/services/bmi_service.dart';
-import 'package:bmi_calculator/types/bmi.dart';
+import 'package:bmi_calculator/models/bmi.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 

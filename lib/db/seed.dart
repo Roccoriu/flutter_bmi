@@ -11,18 +11,18 @@ Future<void> seedDb(Database db) async {
   ];
 
   int id = await db.insert(
-    'User',
+    'user',
     {'name': 'anonymous'},
   );
 
   await db.insert(
-    'Settings',
-    {'selectedUser': id, 'unitSystem': 'metric'},
+    'settings',
+    {'selected_user_id': id, 'unit_system': 'metric'},
   );
 
   for (var rating in defaultBmiRatings) {
     await db.insert(
-      'BmiRating',
+      'bmi_rating',
       rating,
     );
   }

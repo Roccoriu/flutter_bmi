@@ -19,7 +19,7 @@ class NavDrawer extends StatelessWidget {
         ListTile(title: const Text('Home'), onTap: () => context.go('/')),
         ListTile(title: const Text('Calculator'), onTap: () => context.go('/calculator')),
         ListTile(title: const Text('Rating'), onTap: () => context.go('/result')),
-        ListTile(title: const Text('History'), onTap: () {}),
+        ListTile(title: const Text('History'), onTap: () => context.go('/history')),
         ListTile(title: const Text('Settings'), onTap: () {}),
       ],
     ));
