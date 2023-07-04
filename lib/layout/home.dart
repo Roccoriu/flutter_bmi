@@ -1,6 +1,7 @@
 import 'package:bmi_calculator/layout/drawer.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class Home extends StatelessWidget {
   const Home({Key? key}) : super(key: key);
@@ -11,7 +12,7 @@ class Home extends StatelessWidget {
       appBar: AppBar(
         foregroundColor: Colors.white,
         backgroundColor: Colors.deepPurple,
-        title: const Text('Home'),
+        title: Text(AppLocalizations.of(context)!.appBarTitleHome),
       ),
       drawer: const NavDrawer(),
       body: Container(
@@ -26,28 +27,28 @@ class Home extends StatelessWidget {
               color: Colors.deepPurple,
             ),
             const SizedBox(height: 32),
-            const Text(
-              'Welcome to the BMI Calculator!',
-              style: TextStyle(
+            Text(
+              AppLocalizations.of(context)!.welcomeMessage,
+              style: const TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
               ),
             ),
             const SizedBox(height: 16),
-            const Text(
-              'Lorem ipsum dolor sit amet, consectetur adipiscing elit. '
-              'Pellentesque hendrerit condimentum efficitur.',
+            Text(
+              AppLocalizations.of(context)!.welcomeDescription,
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 32),
             ElevatedButton.icon(
               onPressed: () => context.go('/calculator'),
               icon: const Icon(Icons.play_arrow),
-              label: const Text('Get Started'),
+              label: Text(AppLocalizations.of(context)!.getStarted),
               style: ElevatedButton.styleFrom(
                 foregroundColor: Colors.white,
                 backgroundColor: Colors.deepPurple,
-                padding: const EdgeInsets.symmetric(horizontal: 48, vertical: 16),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 48, vertical: 16),
                 textStyle: const TextStyle(fontSize: 18),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(8),

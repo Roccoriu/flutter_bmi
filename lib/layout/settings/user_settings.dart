@@ -1,5 +1,6 @@
 import 'package:bmi_calculator/models/user.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../components/user_create_dialog.dart';
 import '../../services/user_service.dart';
@@ -31,11 +32,12 @@ class _BmiUserSettingsState extends State<BmiUserSettings> {
 
   @override
   Widget build(BuildContext context) {
+    var l10n = AppLocalizations.of(context)!;
     return Scaffold(
       appBar: AppBar(
         foregroundColor: Colors.white,
         backgroundColor: Colors.deepPurple,
-        title: const Text('Users'),
+        title: Text(l10n.appBarTitleUserSettings),
       ),
       //drawer: const NavDrawer(),
       body: FutureBuilder<List<User>>(
@@ -43,13 +45,21 @@ class _BmiUserSettingsState extends State<BmiUserSettings> {
         builder: (BuildContext context, AsyncSnapshot<List<User>> users) {
           return ListView.separated(
             itemCount: users.data?.length ?? 0,
-            separatorBuilder: (BuildContext context, int index) => const Divider(height: 0),
+            separatorBuilder: (BuildContext context, int index) =>
+                const Divider(height: 0),
             itemBuilder: (BuildContext context, int index) {
-              String initials = users.data![index].name.split(' ').map((name) => name[0]).take(2).join();
+              String initials = users.data![index].name
+                  .split(' ')
+                  .map((name) => name[0])
+                  .take(2)
+                  .join();
               return ListTile(
-                contentPadding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                contentPadding:
+                    const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
                 leading: CircleAvatar(
-                  backgroundColor: users.data![index].id == selectedUserId ? Colors.deepPurple : Colors.grey,
+                  backgroundColor: users.data![index].id == selectedUserId
+                      ? Colors.deepPurple
+                      : Colors.grey,
                   child: Text(
                     initials,
                     style: const TextStyle(color: Colors.white),
@@ -58,7 +68,9 @@ class _BmiUserSettingsState extends State<BmiUserSettings> {
                 title: Text(
                   users.data![index].name,
                   style: TextStyle(
-                    color: users.data![index].id == selectedUserId ? Colors.deepPurple : Colors.black,
+                    color: users.data![index].id == selectedUserId
+                        ? Colors.deepPurple
+                        : Colors.black,
                     fontSize: 16,
                     fontWeight: FontWeight.w600,
                   ),
@@ -69,7 +81,9 @@ class _BmiUserSettingsState extends State<BmiUserSettings> {
                     selectedUserId = users.data![index].id;
                   });
                 },
-                tileColor: users.data![index].id == selectedUserId ? Colors.deepPurple.withOpacity(0.1) : null,
+                tileColor: users.data![index].id == selectedUserId
+                    ? Colors.deepPurple.withOpacity(0.1)
+                    : null,
               );
             },
           );
@@ -78,7 +92,7 @@ class _BmiUserSettingsState extends State<BmiUserSettings> {
 
       floatingActionButton: FloatingActionButton(
         onPressed: _showAddUserDialog,
-        child: const Icon(Icons.person_add),
+        child: Icon(Icons.person_add, semanticLabel: l10n.addUser),
       ),
     );
   }

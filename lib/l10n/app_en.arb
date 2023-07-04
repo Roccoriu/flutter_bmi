@@ -1,0 +1,37 @@
+{
+    "title": "Bmi Calculator",
+    "@helloWorld": {
+      "description": "The conventional newborn programmer greeting"
+    },
+    "appBarTitleHome": "Home",
+    "appBarTitleCalculator": "Calculator",
+    "appBarTitleMenu": "Menu",
+    "appBarTitleRating": "Rating",
+    "appBarTitleRatingDetail": "Rating",
+    "appBarTitleHistory": "History",
+    "appBarTitleSettings": "Settings",
+    "appBarTitleUserSettings": "Users",
+
+    "welcomeMessage": "Welcome to the BMI Calculator!",
+    "welcomeDescription": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque hendrerit condimentum efficitur.",
+    "getStarted": "Get Started",
+
+    "height": "Height (cm)",
+    "weight": "Weight (kg)",
+    "reset": "Reset",
+    "calculate": "Calculate",
+    "enter": "Enter",
+    "invalidValue": "Invalid value",
+    "pleaseEnterValue": "Please enter a value",
+    "error": "Error: ",
+    "bmi": "BMI: ",
+    "date": "Date: ",
+    "addUser": "Add User",
+    "username": "User name",
+    "cancel": "Cancel",
+    "add": "Add",
+
+    "manageUsers": "Manage Users",
+    "units": "Units",
+    "metric": "Metric"
+}

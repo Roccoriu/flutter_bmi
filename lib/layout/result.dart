@@ -3,22 +3,27 @@ import 'package:bmi_calculator/services/bmi_service.dart';
 import 'package:bmi_calculator/models/bmi.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class Result extends StatelessWidget {
   const Result({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    var l10n = AppLocalizations.of(context)!;
+
     return Scaffold(
       appBar: AppBar(
         foregroundColor: Colors.white,
         backgroundColor: Colors.deepPurple,
-        title: const Text('Ratings'),
+        title: Text(l10n.appBarTitleRating),
       ),
       drawer: const NavDrawer(),
       body: FutureBuilder<List<BmiRating>>(
-        future: BmiService.getBmiRatings(),
-        builder: (BuildContext context, AsyncSnapshot<List<BmiRating>> bmiState) {
+        future: BmiService.getBmiRatings(
+            localeKey: Localizations.localeOf(context).languageCode),
+        builder:
+            (BuildContext context, AsyncSnapshot<List<BmiRating>> bmiState) {
           if (bmiState.connectionState == ConnectionState.waiting) {
             return const Center(
               child: CircularProgressIndicator(
@@ -27,15 +32,17 @@ class Result extends StatelessWidget {
             );
           } else if (bmiState.hasError) {
             return Center(
-              child: Text('Error: ${bmiState.error}'), // Show an error message
+              child: Text(
+                  '${l10n.error} ${bmiState.error}'), // Show an error message
             );
           } else {
             return ListView.separated(
               itemCount: bmiState.data?.length ?? 0,
-              separatorBuilder: (BuildContext context, int index) => const Divider(height: 0),
+              separatorBuilder: (BuildContext context, int index) =>
+                  const Divider(height: 0),
               itemBuilder: (BuildContext context, int index) {
                 final rating = bmiState.data![index];
-                final IconData icon = _getRatingIcon(rating.description);
+                final IconData icon = _getRatingIcon(rating.ratingKey);
 
                 return ListTile(
                   onTap: () => context.go('/result/${rating.id}'),
@@ -48,7 +55,7 @@ class Result extends StatelessWidget {
                     ),
                   ),
                   subtitle: Text(
-                    'BMI: ${rating.min} - ${rating.max}',
+                    '${l10n.bmi} ${rating.min} - ${rating.max}',
                     style: const TextStyle(
                       fontSize: 14,
                       color: Colors.grey,
@@ -67,17 +74,17 @@ class Result extends StatelessWidget {
 
   IconData _getRatingIcon(String rating) {
     switch (rating) {
-      case 'Underweight':
+      case 'underweight':
         return Icons.mood_bad;
-      case 'Normal':
+      case 'normal':
         return Icons.mood;
-      case 'Overweight':
+      case 'overweight':
         return Icons.mood_bad_outlined;
-      case 'Obese':
+      case 'obese':
         return Icons.sentiment_dissatisfied;
-      case 'Very Obese':
+      case 'very_obese':
         return Icons.sentiment_very_dissatisfied;
-      case 'Morbidly Obese':
+      case 'morbidly_obese':
         return Icons.sentiment_very_dissatisfied_outlined;
       default:
         return Icons.star;
@@ -92,14 +99,18 @@ class RatingDetail extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var l10n = AppLocalizations.of(context)!;
+
     return Scaffold(
       appBar: AppBar(
         foregroundColor: Colors.white,
         backgroundColor: Colors.deepPurple,
-        title: const Text('Rating Detail'),
+        title: Text(l10n.appBarTitleRatingDetail),
       ),
       body: FutureBuilder<BmiRating>(
-        future: BmiService.getBmiRatingById(id: int.parse(id!)),
+        future: BmiService.getBmiRatingById(
+            id: int.parse(id!),
+            localeKey: Localizations.localeOf(context).languageCode),
         builder: (BuildContext context, AsyncSnapshot<BmiRating> bmiRating) {
           if (bmiRating.connectionState == ConnectionState.waiting) {
             return const Center(
@@ -109,7 +120,7 @@ class RatingDetail extends StatelessWidget {
             );
           } else if (bmiRating.hasError) {
             return Center(
-              child: Text('Error: ${bmiRating.error}'),
+              child: Text('${l10n.error} ${bmiRating.error}'),
             );
           } else {
             final rating = bmiRating.data!;
@@ -131,7 +142,7 @@ class RatingDetail extends StatelessWidget {
                     ),
                     const SizedBox(height: 20),
                     Text(
-                      'BMI: ${rating.min} - ${rating.max}',
+                      '${l10n.bmi} ${rating.min} - ${rating.max}',
                       style: const TextStyle(
                         fontSize: 20,
                         color: Colors.grey,

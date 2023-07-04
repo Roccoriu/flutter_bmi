@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class AddUserDialog extends StatefulWidget {
   final Function(String name) onUserAdd;
@@ -13,10 +14,11 @@ class _AddUserDialogState extends State<AddUserDialog> {
 
   @override
   Widget build(BuildContext context) {
+    var l10n = AppLocalizations.of(context)!;
     return AlertDialog(
-      title: const Text(
-        'Add User',
-        style: TextStyle(
+      title: Text(
+        l10n.addUser,
+        style: const TextStyle(
           fontSize: 20,
           fontWeight: FontWeight.bold,
           color: Colors.deepPurple,
@@ -27,9 +29,9 @@ class _AddUserDialogState extends State<AddUserDialog> {
           children: <Widget>[
             TextField(
               controller: _controller,
-              decoration: const InputDecoration(
-                border: OutlineInputBorder(),
-                labelText: 'User name',
+              decoration: InputDecoration(
+                border: const OutlineInputBorder(),
+                labelText: l10n.username,
               ),
             ),
           ],
@@ -37,9 +39,9 @@ class _AddUserDialogState extends State<AddUserDialog> {
       ),
       actions: <Widget>[
         TextButton(
-          child: const Text(
-            'Cancel',
-            style: TextStyle(
+          child: Text(
+            l10n.cancel,
+            style: const TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.bold,
               color: Colors.grey,
@@ -54,9 +56,9 @@ class _AddUserDialogState extends State<AddUserDialog> {
             foregroundColor: Colors.white,
             backgroundColor: Colors.deepPurple,
           ),
-          child: const Text(
-            'Add',
-            style: TextStyle(
+          child: Text(
+            l10n.add,
+            style: const TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.bold,
             ),

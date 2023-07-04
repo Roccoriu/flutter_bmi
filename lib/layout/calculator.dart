@@ -1,6 +1,7 @@
 import 'package:bmi_calculator/components/bmi_form.dart';
 import 'package:bmi_calculator/layout/drawer.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class Calculator extends StatelessWidget {
   const Calculator({Key? key}) : super(key: key);
@@ -12,7 +13,7 @@ class Calculator extends StatelessWidget {
         appBar: AppBar(
           foregroundColor: Colors.white,
           backgroundColor: Colors.deepPurple,
-          title: const Text('Calculator'),
+          title: Text(AppLocalizations.of(context)!.appBarTitleCalculator),
         ),
         drawer: const NavDrawer(),
         body: const Center(

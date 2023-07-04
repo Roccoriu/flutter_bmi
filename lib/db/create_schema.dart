@@ -14,6 +14,8 @@ Future<void> createDbSchema(Database db) async {
       min REAL,
       max REAL,
       name TEXT,
+      rating_key TEXT,
+      locale_key TEXT,
       description TEXT
     );
   ''');

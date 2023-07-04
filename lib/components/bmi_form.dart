@@ -2,6 +2,7 @@ import 'package:bmi_calculator/services/bmi_service.dart';
 import 'package:bmi_calculator/utils/bmi.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class BmiForm extends StatefulWidget {
   const BmiForm({Key? key}) : super(key: key);
@@ -31,7 +32,8 @@ class _BmiFormState extends State<BmiForm> {
             Column(
               children: [
                 _buildSliderFormField(
-                  label: 'Height (cm)',
+                  label: AppLocalizations.of(context)!
+                      .height, // added localization
                   value: height,
                   min: 100,
                   max: 300,
@@ -43,7 +45,8 @@ class _BmiFormState extends State<BmiForm> {
                 ),
                 const SizedBox(height: 60),
                 _buildSliderFormField(
-                  label: 'Weight (kg)',
+                  label: AppLocalizations.of(context)!
+                      .weight, // added localization
                   value: weight,
                   min: 30,
                   max: 200,
@@ -59,12 +62,13 @@ class _BmiFormState extends State<BmiForm> {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 SizedBox(
-                  width: 160,
+                  width: 190,
                   child: ElevatedButton.icon(
                     icon: const Icon(Icons.refresh),
-                    label: const Text(
-                      'Reset',
-                      style: TextStyle(fontSize: 16),
+                    label: Text(
+                      // added localization
+                      AppLocalizations.of(context)!.reset,
+                      style: const TextStyle(fontSize: 16),
                     ),
                     onPressed: () {
                       setState(() {
@@ -75,12 +79,13 @@ class _BmiFormState extends State<BmiForm> {
                   ),
                 ),
                 SizedBox(
-                  width: 160,
+                  width: 190,
                   child: ElevatedButton.icon(
                     icon: const Icon(Icons.play_arrow),
-                    label: const Text(
-                      'Calculate',
-                      style: TextStyle(fontSize: 16),
+                    label: Text(
+                      // added localization
+                      AppLocalizations.of(context)!.calculate,
+                      style: const TextStyle(fontSize: 16),
                     ),
                     onPressed: () => _formKey.currentState!.validate()
                         ? onCalculate((id) => context.go('/result/$id'))
@@ -102,7 +107,9 @@ class _BmiFormState extends State<BmiForm> {
     required double max,
     required ValueChanged<double> onChanged,
   }) {
-    final formattedValue = label == 'Height (cm)' ? value.round().toString() : value.toStringAsFixed(1);
+    final formattedValue = (label == AppLocalizations.of(context)!.height)
+        ? value.round().toString()
+        : value.toStringAsFixed(1);
     bool isEditing = false;
 
     return Column(
@@ -130,8 +137,11 @@ class _BmiFormState extends State<BmiForm> {
                     onChanged(newValue);
                   }
                 },
-                divisions: label == 'Height (cm)' ? (max - min).toInt() : ((max - min) * 10).toInt(),
-                label: '$formattedValue ${label == 'Height (cm)' ? 'cm' : 'kg'}',
+                divisions: (label == AppLocalizations.of(context)!.height)
+                    ? (max - min).toInt()
+                    : ((max - min) * 10).toInt(),
+                label:
+                    '$formattedValue ${(label == AppLocalizations.of(context)!.height) ? 'cm' : 'kg'}',
               ),
             ),
             SizedBox(
@@ -145,10 +155,10 @@ class _BmiFormState extends State<BmiForm> {
                   controller: TextEditingController(text: formattedValue),
                   keyboardType: TextInputType.number,
                   textAlign: TextAlign.center,
-                  decoration: const InputDecoration(
-                    contentPadding: EdgeInsets.symmetric(vertical: 8),
+                  decoration: InputDecoration(
+                    contentPadding: const EdgeInsets.symmetric(vertical: 8),
                     border: InputBorder.none,
-                    hintText: 'Enter',
+                    hintText: AppLocalizations.of(context)!.enter,
                   ),
                   onChanged: (text) {
                     if (!isEditing) {
@@ -164,11 +174,13 @@ class _BmiFormState extends State<BmiForm> {
                   },
                   validator: (text) {
                     if (text!.isEmpty) {
-                      return 'Please enter a value';
+                      return AppLocalizations.of(context)!.pleaseEnterValue;
                     }
                     final enteredValue = double.tryParse(text);
-                    if (enteredValue == null || enteredValue < min || enteredValue > max) {
-                      return 'Invalid value';
+                    if (enteredValue == null ||
+                        enteredValue < min ||
+                        enteredValue > max) {
+                      return AppLocalizations.of(context)!.invalidValue;
                     }
                     return null;
                   },
@@ -189,7 +201,8 @@ class _BmiFormState extends State<BmiForm> {
   void onCalculate(Function(int) callback) async {
     var bmi = calcBMI(height, weight);
 
-    var id = await BmiService.getBmiRatingIdByResult(rating: bmi);
+    var id = await BmiService.getBmiRatingIdByResult(
+        rating: bmi, localeKey: Localizations.localeOf(context).languageCode);
 
     callback(id);
   }
