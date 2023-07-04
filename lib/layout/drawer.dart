@@ -7,21 +7,45 @@ class NavDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Drawer(
-        child: ListView(
-      padding: EdgeInsets.zero,
-      children: [
-        const DrawerHeader(
-          decoration: BoxDecoration(
-            color: Colors.deepPurple,
+      child: ListView(
+        padding: EdgeInsets.zero,
+        children: [
+          const DrawerHeader(
+            decoration: BoxDecoration(
+              color: Colors.deepPurple,
+            ),
+            child: Text(
+              'Menu',
+              style: TextStyle(color: Colors.white, fontSize: 25),
+            ),
           ),
-          child: Text('Drawer Header'),
-        ),
-        ListTile(title: const Text('Home'), onTap: () => context.go('/')),
-        ListTile(title: const Text('Calculator'), onTap: () => context.go('/calculator')),
-        ListTile(title: const Text('Rating'), onTap: () => context.go('/result')),
-        ListTile(title: const Text('History'), onTap: () => context.go('/history')),
-        ListTile(title: const Text('Settings'), onTap: () {}),
-      ],
-    ));
+          ListTile(
+            leading: const Icon(Icons.home),
+            title: const Text('Home'),
+            onTap: () => context.go('/'),
+          ),
+          ListTile(
+            leading: const Icon(Icons.calculate),
+            title: const Text('Calculator'),
+            onTap: () => context.go('/calculator'),
+          ),
+          ListTile(
+            leading: const Icon(Icons.star_rate),
+            title: const Text('Rating'),
+            onTap: () => context.go('/result'),
+          ),
+          ListTile(
+            leading: const Icon(Icons.history),
+            title: const Text('History'),
+            onTap: () => context.go('/history'),
+          ),
+          ListTile(
+            leading: const Icon(Icons.settings),
+            title: const Text('Settings'),
+            onTap: () => context.go('/settings'),
+          ),
+        ],
+      ),
+    );
   }
 }
