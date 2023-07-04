@@ -1,12 +1,8 @@
-import 'package:bmi_calculator/store/actions/bmi_actions.dart';
-import 'package:bmi_calculator/store/model/bmi_state.dart';
+import 'package:bmi_calculator/services/bmi_service.dart';
 import 'package:bmi_calculator/utils/bmi.dart';
-import 'package:bmi_calculator/utils/validators.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_redux/flutter_redux.dart';
 import 'package:go_router/go_router.dart';
-
-import '../store/model/app_state.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class BmiForm extends StatefulWidget {
   const BmiForm({Key? key}) : super(key: key);
@@ -21,6 +17,9 @@ class _BmiFormState extends State<BmiForm> {
   final heightController = TextEditingController();
   final weightController = TextEditingController();
 
+  double height = 160.0;
+  double weight = 60.0;
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -32,54 +31,65 @@ class _BmiFormState extends State<BmiForm> {
           children: [
             Column(
               children: [
-                TextFormField(
-                  validator: formFieldNotNull,
-                  controller: heightController,
-                  keyboardType: TextInputType.number,
-                  decoration: const InputDecoration(
-                    labelText: 'Height (cm)',
-                    hintText: 'Enter your height in cm',
-                  ),
+                _buildSliderFormField(
+                  label: AppLocalizations.of(context)!
+                      .height, // added localization
+                  value: height,
+                  min: 100,
+                  max: 300,
+                  onChanged: (value) {
+                    setState(() {
+                      height = value;
+                    });
+                  },
                 ),
                 const SizedBox(height: 60),
-                TextFormField(
-                  validator: formFieldNotNull,
-                  controller: weightController,
-                  keyboardType: TextInputType.number,
-                  decoration: const InputDecoration(
-                    labelText: 'Weight (kg)',
-                    hintText: 'Enter your weight in kg',
-                  ),
-                )
+                _buildSliderFormField(
+                  label: AppLocalizations.of(context)!
+                      .weight, // added localization
+                  value: weight,
+                  min: 30,
+                  max: 200,
+                  onChanged: (value) {
+                    setState(() {
+                      weight = value;
+                    });
+                  },
+                ),
               ],
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 SizedBox(
-                  width: 150,
-                  child: ElevatedButton(
-                    child: const Text(
-                      'Clear',
-                      style: TextStyle(fontSize: 20),
+                  width: 190,
+                  child: ElevatedButton.icon(
+                    icon: const Icon(Icons.refresh),
+                    label: Text(
+                      // added localization
+                      AppLocalizations.of(context)!.reset,
+                      style: const TextStyle(fontSize: 16),
                     ),
                     onPressed: () {
-                      heightController.clear();
-                      weightController.clear();
+                      setState(() {
+                        height = 160.0;
+                        weight = 60.0;
+                      });
                     },
                   ),
                 ),
-                StoreConnector<AppState, BmiState>(
-                  converter: (store) => store.state.bmiState,
-                  builder: (BuildContext context, BmiState bmiState) => SizedBox(
-                    width: 150,
-                    child: ElevatedButton(
-                      child: const Text(
-                        'Calculate',
-                        style: TextStyle(fontSize: 20),
-                      ),
-                      onPressed: () => _formKey.currentState!.validate() ? onCalculate(bmiState) : DoNothingAction(),
+                SizedBox(
+                  width: 190,
+                  child: ElevatedButton.icon(
+                    icon: const Icon(Icons.play_arrow),
+                    label: Text(
+                      // added localization
+                      AppLocalizations.of(context)!.calculate,
+                      style: const TextStyle(fontSize: 16),
                     ),
+                    onPressed: () => _formKey.currentState!.validate()
+                        ? onCalculate((id) => context.go('/result/$id'))
+                        : DoNothingAction(),
                   ),
                 ),
               ],
@@ -90,14 +100,111 @@ class _BmiFormState extends State<BmiForm> {
     );
   }
 
-  void onCalculate(BmiState bmiState) {
-    var height = double.parse(heightController.text);
-    var weight = double.parse(weightController.text);
+  Widget _buildSliderFormField({
+    required String label,
+    required double value,
+    required double min,
+    required double max,
+    required ValueChanged<double> onChanged,
+  }) {
+    final formattedValue = (label == AppLocalizations.of(context)!.height)
+        ? value.round().toString()
+        : value.toStringAsFixed(1);
+    bool isEditing = false;
+
+    return Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(bottom: 8.0),
+          child: Text(
+            label,
+            style: const TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w600,
+              color: Colors.deepPurple,
+            ),
+          ),
+        ),
+        Row(
+          children: [
+            Expanded(
+              child: Slider(
+                value: value,
+                min: min,
+                max: max,
+                onChanged: (newValue) {
+                  if (!isEditing) {
+                    onChanged(newValue);
+                  }
+                },
+                divisions: (label == AppLocalizations.of(context)!.height)
+                    ? (max - min).toInt()
+                    : ((max - min) * 10).toInt(),
+                label:
+                    '$formattedValue ${(label == AppLocalizations.of(context)!.height) ? 'cm' : 'kg'}',
+              ),
+            ),
+            SizedBox(
+              width: 60,
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.grey[200],
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: TextFormField(
+                  controller: TextEditingController(text: formattedValue),
+                  keyboardType: TextInputType.number,
+                  textAlign: TextAlign.center,
+                  decoration: InputDecoration(
+                    contentPadding: const EdgeInsets.symmetric(vertical: 8),
+                    border: InputBorder.none,
+                    hintText: AppLocalizations.of(context)!.enter,
+                  ),
+                  onChanged: (text) {
+                    if (!isEditing) {
+                      final enteredValue = double.tryParse(text) ?? value;
+                      onChanged(enteredValue);
+                    }
+                  },
+                  onEditingComplete: () {
+                    isEditing = false;
+                  },
+                  onTap: () {
+                    isEditing = true;
+                  },
+                  validator: (text) {
+                    if (text!.isEmpty) {
+                      return AppLocalizations.of(context)!.pleaseEnterValue;
+                    }
+                    final enteredValue = double.tryParse(text);
+                    if (enteredValue == null ||
+                        enteredValue < min ||
+                        enteredValue > max) {
+                      return AppLocalizations.of(context)!.invalidValue;
+                    }
+                    return null;
+                  },
+                  onFieldSubmitted: (text) {
+                    isEditing = false;
+                    final enteredValue = double.tryParse(text) ?? value;
+                    onChanged(enteredValue);
+                  },
+                ),
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
+  void onCalculate(Function(int) callback) async {
     var bmi = calcBMI(height, weight);
 
-    StoreProvider.of<AppState>(context).dispatch(SetBmiResultAction(bmi));
+    var id = await BmiService.getBmiRatingIdByResult(
+        rating: bmi, localeKey: Localizations.localeOf(context).languageCode);
 
-    context.go('/result/${bmiState.getBmiRatingIndex(bmi)}');
+    callback(id);
   }
 
   @override

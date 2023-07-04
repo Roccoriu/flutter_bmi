@@ -1,14 +1,13 @@
+import 'package:bmi_calculator/db/database_helper.dart';
 import 'package:bmi_calculator/routes/router.dart';
-import 'package:bmi_calculator/store/model/app_state.dart';
-import 'package:bmi_calculator/store/reducers/app_reducers.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_redux/flutter_redux.dart';
-import 'package:redux/redux.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 void main() {
-  final store = Store<AppState>(appReducer, initialState: initialState);
+  DatabaseHelper.instance.database;
 
-  runApp(StoreProvider(store: store, child: const MyApp()));
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -18,7 +17,18 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp.router(
       routerConfig: router,
-      title: 'BMI Calculator',
+      onGenerateTitle: (context) => AppLocalizations.of(context)!.title,
+      localizationsDelegates: const [
+        AppLocalizations.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      supportedLocales: const [
+        Locale('en', 'US'),
+        Locale('it', 'IT'),
+        Locale('de', 'CH'),
+      ],
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,

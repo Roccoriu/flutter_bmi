@@ -1,0 +1,33 @@
+{
+    "title": "Bmi Rechner",
+    "appBarTitleHome": "Startseite",
+    "appBarTitleCalculator": "Rechner",
+    "appBarTitleMenu": "Menü",
+    "appBarTitleRating": "Bewertung",
+    "appBarTitleRatingDetail": "Detailierte Bewertung",
+    "appBarTitleHistory": "Verlauf",
+    "appBarTitleSettings": "Einstellungen",
+    "appBarTitleUserSettings": "Benutzer",
+
+    "welcomeMessage": "Willkommen beim BMI-Rechner!",
+    "loremIpsum": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque hendrerit condimentum efficitur.",
+    "getStarted": "Anfangen",
+
+    "height": "Größe (cm)",
+    "weight": "Gewicht (kg)",
+    "reset": "Zurücksetzen",
+    "calculate": "Berechnen",
+    "enter": "Eingeben",
+    "invalidValue": "Ungültiger Wert",
+    "pleaseEnterValue": "Bitte einen Wert eingeben",
+    "error": "Fehler: ",
+    "bmi": "BMI: ",
+    "date": "Datum: ",
+    "addUser": "Benutzer hinzufügen",
+    "username": "Benutzername",
+    "cancel": "Abbrechen",
+    "add": "Hinzufügen",
+    "manageUsers": "Benutzer verwalten",
+    "units": "Einheiten",
+    "metric": "Metrisch"
+}
